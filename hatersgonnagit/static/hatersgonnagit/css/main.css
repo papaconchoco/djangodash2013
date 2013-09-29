@@ -6,3 +6,7 @@ body {
 .github-avatar {
   width: 20px;
 }
+
+.centered {
+  text-align: center;
+}

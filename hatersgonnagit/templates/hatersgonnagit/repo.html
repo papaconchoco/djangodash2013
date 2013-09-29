@@ -8,7 +8,13 @@
   </div>
 </div>
 
-
+<div class="jumbotron" id="scores" style="display: none;">
+  <h1>Yo! <a id="hater" href='#'></a> is gonna hate</h1>
+  <p class="lead centered">
+    <canvas id="canvas"></canvas>
+  </p>
+  <p><a class="btn btn-lg btn-success" href="#">The Most Hater Eva</a></p>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}
@@ -18,6 +24,15 @@
       'issues': "{% url "issues_view" repo.owner.login repo.name %}",
       'comments': "{% url "comments_view" repo.owner.login repo.name %}",
     };
+    haters.images = [
+      {
+        'src': "{% static "hatersgonnagit/images/megahater.gif" %}",
+        'width': 528,
+        'height': 384,
+        'x': 220,
+        'y': 80
+      }
+    ];
   </script>
   <script src="{% static "hatersgonnagit/scripts/repo.js" %}"></script>
 {% endblock %}
