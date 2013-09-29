@@ -27,15 +27,15 @@ def commits_view(request, repo_user, repo_name):
     sa = request.user.social_auth.get()
     gh = GitHub(sa.tokens)
     repo = gh.repo(repo_user, repo_name)
-    commits = repo.commits().get()
+    commits = repo.commits().get(per_page=100)
     committers = {}
     for commit in commits:
+        committer = commit['commit']['committer']['name']
         try:
-            committer = commit['committer']['login']
-            meta = commit['committer']
+            committer = commit['author']['login']
+            meta = commit['author']
         except TypeError:
             # Sometimes 'author' and 'committer' fields are null
-            committer = commit['commit']['committer']['name']
             meta = None
         if committer not in committers:
             committers[committer] = {
@@ -60,7 +60,25 @@ def comments_view(request, repo_user, repo_name):
     sa = request.user.social_auth.get()
     gh = GitHub(sa.tokens)
     repo = gh.repo(repo_user, repo_name)
-    return HttpResponse(json.dumps({}),
+    comments = repo.commits().comments().get(per_page=100)
+    users = {}
+    for comment in comments:
+        user = comment['user']['login']
+        meta = comment['user']
+        if user not in users:
+            users[user] = {
+                'pos': 0,
+                'neg': 0,
+                'meta': meta,
+            }
+        text = comment['body']
+        blob = TextBlob(text)
+        polarity, subjectivity = blob.sentiment
+        if polarity >= 0.1:
+            users[user]['pos'] += 1
+        else:
+            users[user]['neg'] += 1
+    return HttpResponse(json.dumps(users),
                         content_type="application/json")
 
 
@@ -69,5 +87,43 @@ def issues_view(request, repo_user, repo_name):
     sa = request.user.social_auth.get()
     gh = GitHub(sa.tokens)
     repo = gh.repo(repo_user, repo_name)
-    return HttpResponse(json.dumps({}),
+    issues = repo.issues().get()
+    users = {}
+    for issue in issues:
+        user = issue['user']['login']
+        meta = issue['user']
+        if user not in users:
+            users[user] = {
+                'pos': 0,
+                'neg': 0,
+                'meta': meta,
+            }
+        for element in ['title', 'body']:
+            text = issue[element]
+            blob = TextBlob(text)
+            polarity, subjectivity = blob.sentiment
+            if polarity >= 0.1:
+                users[user]['pos'] += 1
+            else:
+                users[user]['neg'] += 1
+        if issue['comments'] > 0:
+            issue_number = issue['number']
+            comments = repo.issue(issue_number).comments().get(per_page=100)
+            for comment in comments:
+                user = comment['user']['login']
+                meta = comment['user']
+                if user not in users:
+                    users[user] = {
+                        'pos': 0,
+                        'neg': 0,
+                        'meta': meta,
+                    }
+                text = comment['body']
+                blob = TextBlob(text)
+                polarity, subjectivity = blob.sentiment
+                if polarity >= 0.1:
+                    users[user]['pos'] += 1
+                else:
+                    users[user]['neg'] += 1
+    return HttpResponse(json.dumps(users),
                         content_type="application/json")
