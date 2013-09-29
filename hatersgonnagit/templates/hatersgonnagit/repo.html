@@ -1,0 +1,23 @@
+{% extends "hatersgonnagit/base.html" %}
+{% load staticfiles %}
+{% block container %}
+<div class="page-header" id="loading">
+  <h1>Fetching <span id="element-progress"></span>...</h1>
+  <div class="progress progress-striped active">
+    <div id="elements-progress" class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%;"><span class="sr-only">10%</span></div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_scripts %}
+  <script>
+    haters.urls = {
+      'commits': "{% url "commits_view" repo.owner.login repo.name %}",
+      'issues': "{% url "issues_view" repo.owner.login repo.name %}",
+      'comments': "{% url "comments_view" repo.owner.login repo.name %}",
+    };
+  </script>
+  <script src="{% static "hatersgonnagit/scripts/repo.js" %}"></script>
+{% endblock %}

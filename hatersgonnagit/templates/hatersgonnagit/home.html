@@ -1,0 +1,22 @@
+{% extends "hatersgonnagit/base.html" %}
+{% block container %}
+  {% if not gh_user %}
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>{{ PROJECT_NAME }}!</h1>
+        <p>If you wanna know which of your coder fellas are haters, just sign in using you GitHub account!</p>
+        <p>
+          <a class="btn btn-lg btn-primary" href="/login/github/">Sign in with GitHub</a>
+        </p>
+      </div>
+  {% else %}
+    <div class="list-group">
+        {% for repo in gh_repos %}
+        <a href="{% url "repo_view" repo.owner.login repo.name %}" class="list-group-item">
+          <h4 class="list-group-item-heading">{{ repo.full_name}}</h4>
+          <p class="list-group-item-text">{{ repo.description }}</p>
+        </a>
+        {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
