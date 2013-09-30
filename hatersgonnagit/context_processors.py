@@ -18,8 +18,7 @@ def github(request):
     except:
         user = {}
         repos = []
-    sources = [repo for repo in repos if not repo['fork']]
-    sorted_repos = sorted(sources, key=lambda repo: -repo['watchers'])
+    sorted_repos = sorted(repos, key=lambda repo: -repo['watchers'])
     return {
         "gh_user": user,
         "gh_repos": sorted_repos,

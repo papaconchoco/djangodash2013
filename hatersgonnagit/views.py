@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from libsaas.http import HTTPError
 from libsaas.services.github import GitHub
 
 
@@ -27,8 +28,12 @@ def commits_view(request, repo_user, repo_name):
     sa = request.user.social_auth.get()
     gh = GitHub(sa.tokens)
     repo = gh.repo(repo_user, repo_name)
-    commits = repo.commits().get(per_page=100)
     committers = {}
+    try:
+        commits = repo.commits().get(per_page=100)
+    except HTTPError:
+        return HttpResponse(json.dumps(committers),
+                            content_type="application/json")
     for commit in commits:
         committer = commit['commit']['committer']['name']
         try:
@@ -60,8 +65,12 @@ def comments_view(request, repo_user, repo_name):
     sa = request.user.social_auth.get()
     gh = GitHub(sa.tokens)
     repo = gh.repo(repo_user, repo_name)
-    comments = repo.commits().comments().get(per_page=100)
     users = {}
+    try:
+        comments = repo.commits().comments().get(per_page=100)
+    except HTTPError:
+        return HttpResponse(json.dumps(users),
+                            content_type="application/json")
     for comment in comments:
         user = comment['user']['login']
         meta = comment['user']
@@ -87,8 +96,12 @@ def issues_view(request, repo_user, repo_name):
     sa = request.user.social_auth.get()
     gh = GitHub(sa.tokens)
     repo = gh.repo(repo_user, repo_name)
-    issues = repo.issues().get()
     users = {}
+    try:
+        issues = repo.issues().get()
+    except HTTPError:
+        return HttpResponse(json.dumps(users),
+                            content_type="application/json")
     for issue in issues:
         user = issue['user']['login']
         meta = issue['user']
