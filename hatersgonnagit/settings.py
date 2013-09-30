@@ -1,7 +1,7 @@
 # Django settings for hatersgonnagit project.
 from os import environ, path
 
-DEBUG = True
+DEBUG = environ.get('GITHUB_KEY', True)
 TEMPLATE_DEBUG = DEBUG
 
 PROJECT_NAME = u"Haters Gonna Git"
