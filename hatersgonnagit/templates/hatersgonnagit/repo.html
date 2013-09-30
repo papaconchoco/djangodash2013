@@ -9,11 +9,14 @@
 </div>
 
 <div class="jumbotron" id="scores" style="display: none;">
-  <h1>Yo! <a id="hater" href='#'></a> is gonna hate</h1>
+  <h1>Yo! <a id="hater" href='#'></a> is a hater</h1>
   <p class="lead centered">
     <canvas id="canvas"></canvas>
   </p>
-  <p><a class="btn btn-lg btn-success" href="#">The Most Hater Eva</a></p>
+  <p class="centered">
+    <a class="btn btn-lg btn-success" id="positive" href="#"></a>
+    <a class="btn btn-lg btn-danger" id="negative" href="#"></a>
+  </p>
 </div>
 {% endblock %}
 
@@ -31,6 +34,30 @@
         'height': 384,
         'x': 220,
         'y': 80
+      }, {
+        'src': "{% static "hatersgonnagit/images/hatersgonnacat.jpg" %}",
+        'width': 400,
+        'height': 225,
+        'x': 150,
+        'y': 50
+      }, {
+        'src': "{% static "hatersgonnagit/images/hatersgonnabatman.jpg" %}",
+        'width': 500,
+        'height': 573,
+        'x': 260,
+        'y': 40
+      }, {
+        'src': "{% static "hatersgonnagit/images/hatersgonnaeagle.jpg" %}",
+        'width': 526,
+        'height': 350,
+        'x': 240,
+        'y': 70
+      }, {
+        'src': "{% static "hatersgonnagit/images/hatersgonnapriest.jpg" %}",
+        'width': 550,
+        'height': 396,
+        'x': 240,
+        'y': 20
       }
     ];
   </script>

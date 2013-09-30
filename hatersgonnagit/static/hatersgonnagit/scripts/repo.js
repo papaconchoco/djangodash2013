@@ -54,8 +54,8 @@
     });
     positiveKeys.sort(descending);
     negativeKeys.sort(descending);
-    hater = merged[positive[positiveKeys[0]][0]];
-    liker = merged[negative[negativeKeys[0]][0]];
+    liker = merged[positive[positiveKeys[0]][0]];
+    hater = merged[negative[negativeKeys[0]][0]];
     showHater(hater, liker);
   }
 
@@ -63,7 +63,7 @@
     var can, ctx, img, haterImage, avatarImg;
     haters.hater = hater;
     haters.liker = liker;
-    haterImage = haters.images[0];  // This can be randomized
+    haterImage = haters.images[Math.floor(Math.random() * haters.images.length)];
     $('#canvas')
       .attr('width', haterImage.width)
       .attr('height', haterImage.height);
@@ -82,6 +82,8 @@
     $('#hater')
       .html(hater.meta.login)
       .attr('href', hater.meta.html_url);
+    $('#positive').html(hater.pos + ' positive messages');
+    $('#negative').html(hater.neg + ' negative messages');
     $('#loading').delay(1000).fadeOut(400);
     $('#scores').delay(1400).fadeIn(400);
 
