@@ -68,17 +68,16 @@
       .attr('width', haterImage.width)
       .attr('height', haterImage.height);
     can = document.getElementById('canvas');
-    console.log(can.width)
     ctx = can.getContext('2d');
     img = new Image();
     img.src = haterImage.src;
     img.onload = function () {
-      ctx.drawImage(img, 0, 0);
-    };
-    avatarImg = new Image();
-    avatarImg.src = hater.meta.avatar_url;
-    avatarImg.onload = function () {
-      ctx.drawImage(avatarImg, haterImage.x, haterImage.y);
+      avatarImg = new Image();
+      avatarImg.src = hater.meta.avatar_url;
+      avatarImg.onload = function () {
+        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(avatarImg, haterImage.x, haterImage.y);
+      };
     };
     $('#hater')
       .html(hater.meta.login)
